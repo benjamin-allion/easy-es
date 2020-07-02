@@ -9,8 +9,32 @@ const elasticService = new ElasticService(elasticSearchHosts);
 const demoItems = [{
     id: 123,
     firstName: 'DemoFirstName',
-    lastName: 'DemoLastName'
+    lastName: 'DemoLastName',
+    phone: '0651000001'
 }];
+
+const mappings = [
+    {
+        "type_1": {
+            "_all": {"enabled": true},
+            "properties": {
+                "firstName": {"type": "string"},
+                "phone": {
+                    "type": "number"
+                }
+            }
+        },
+        "type_2": {
+            "properties": {
+                "firstName": {"type": "string"},
+                "phone": {
+                    "type": "number",
+                    "analyzer":"phone_analyzer"
+                }
+            }
+        }
+    }
+]
 
 (async () => {
     await elasticService.init();
