@@ -1,4 +1,5 @@
 const { Client } = require('@elastic/elasticsearch');
+const DEFAULT_TIMEOUT = 30000;
 const DEFAULT_PAGE_SIZE = 100;
 const DEFAULT_INDEX = 'default_index_2'
 
@@ -52,7 +53,8 @@ class ElasticService {
     async createIndex(indexName = DEFAULT_INDEX) {
         try {
           await this.client.indices.create({
-              index: indexName
+              index: indexName,
+              timeout: DEFAULT_TIMEOUT,
           });
           console.log(`[ElasticService][createIndex] '${indexName}' index creation done.`);
         } catch (error){
@@ -61,29 +63,45 @@ class ElasticService {
     }
 
     /**
+     * Add new mapping to specific index
+     * @param indexName
+     */
+    async addMappingToIndex(mapping, indexName = DEFAULT_INDEX) {
+        try {
+            await this.client.indices.putMapping({
+                index: indexName,
+                timeout: DEFAULT_TIMEOUT,
+                body: mapping
+            })
+            console.log(`[ElasticService][addMappingToIndex] new mapping added to '${indexName}'.`);
+        } catch (error){
+            throw new Error(`[ElasticService][addMappingToIndex] mapping cannot be added to '${indexName}': ${error}`);
+        }
+    }
+
+    /**
      * Add new data to specified ES Index
-     * @param {string} indexName
      * @param {number} id
      * @param {string} type
+     * @param {string} indexName
      * @param {object} data
      */
-    addDocumentToIndex(
+    async addDocumentToIndex(
         {
+            id,
+            data,
             indexName = DEFAULT_INDEX,
-            id,
-            data
         }) {
-        this.client.index({
-            index: indexName,
-            id,
-            body: data
-        }, function (error, response, status) {
-            if (error) {
-                throw new Error(`[ElasticService][createIndex] Document injection failed : ${error}`)
-            } else {
-                return response;
-            }
-        });
+        try {
+            await client.index({
+                index: indexName,
+                timeout: DEFAULT_INDEX,
+                body: data
+            })
+            console.log(`[ElasticService][addDocumentToIndex] New document added to '${indexName}'`);
+        } catch (error){
+            throw new Error(`[ElasticService][addDocumentToIndex] Document cannot be added to '${indexName}': ${error}`);
+        }
     }
 
     /**
