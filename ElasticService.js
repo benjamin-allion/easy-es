@@ -39,4 +39,26 @@ class ElasticService {
             }
         });
     }
+
+    /**
+     * Add new data to specified ES Index
+     * @param {string} indexName
+     * @param {number} id
+     * @param {string} type
+     * @param {object} data
+     */
+    addDocumentToIndex(indexName, id, type, data){
+        this.client.index({
+            index: indexName,
+            id,
+            type,
+            body: data
+        }, function(error, response, status) {
+            if (error) {
+                throw new Error(`[ElasticService][createIndex] Document injection failed : ${err}`)
+            } else {
+                return response;
+            }
+        });
+    }
 }
