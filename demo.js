@@ -38,7 +38,14 @@ const mappings = [
 
 (async () => {
     await elasticService.init();
-    await elasticService.addDocumentToIndex(demoItems[0].id, demoItems[0]);
+
+    await elasticService.createIndex('demoItem_mapping_1')
+    await elasticService.addMappingToIndex('demoItem_mapping_1', mappings[0])
+    await elasticService.createIndex('demoItem_mapping_2')
+    await elasticService.addMappingToIndex('demoItem_mapping_2', mappings[1])
+
+    await elasticService.addDocumentToIndex(demoItems[0].id, demoItems[0], 'demoItem_mapping_1');
+    await elasticService.addDocumentToIndex(demoItems[0].id, demoItems[0], 'demoItem_mapping_2');
 
     const app = express();
     app.use(bodyParser.json())
@@ -58,6 +65,7 @@ const mappings = [
     // Search Route
     app.get('/search', async (req, res) => {
         const searchOptions = {
+            indexName: req.query.mapping,
             fields: {
                 firstName: req.query.query
             }
