@@ -24,4 +24,19 @@ class ElasticService {
         });
     }
 
+    /**
+     * Try to create a new ES index
+     * @param indexName
+     */
+    createIndex(indexName) {
+        this.client.indices.create({
+            index: indexName
+        }, function (error, response, status) {
+            if (error) {
+                throw new Error(`[ElasticService][createIndex] Index creation failed : ${error}`)
+            } else {
+                return response;
+            }
+        });
+    }
 }
