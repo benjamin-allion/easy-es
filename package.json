@@ -5,13 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node index.js",
+    "demo": "node demo.js"
   },
   "author": "ALLION Benjamin",
   "license": "MIT",
   "dependencies": {
+    "@elastic/elasticsearch": "^7.8.0",
     "body-parser": "^1.19.0",
-    "elasticsearch": "^16.7.1",
     "express": "^4.17.1"
   }
 }
