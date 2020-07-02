@@ -1,0 +1,17 @@
+{
+  "name": "easy-es",
+  "version": "1.0.0",
+  "description": "ElasticSearch Helper for NodeJS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "ALLION Benjamin",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "elasticsearch": "^16.7.1",
+    "express": "^4.17.1"
+  }
+}
