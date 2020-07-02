@@ -6,8 +6,15 @@ const {ElasticService} = require('./ElasticService');
 const elasticSearchHosts = ['http://localhost:9200'];
 const elasticService = new ElasticService(elasticSearchHosts);
 
+const demoItems = [{
+    id: 123,
+    firstName: 'DemoFirstName',
+    lastName: 'DemoLastName'
+}];
+
 (async () => {
     await elasticService.init();
+    await elasticService.addDocumentToIndex(demoItems[0].id, demoItems[0]);
 
     const app = express();
     app.use(bodyParser.json())
@@ -28,7 +35,7 @@ const elasticService = new ElasticService(elasticSearchHosts);
     app.get('/search', async (req, res) => {
         const searchOptions = {
             fields: {
-                name: 'DEMO'
+                firstName: req.query.query
             }
         }
         const searchResult = await elasticService.search(searchOptions);

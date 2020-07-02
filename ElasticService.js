@@ -1,5 +1,4 @@
-const { Client } = require('@elastic/elasticsearch');
-const DEFAULT_TIMEOUT = 30000;
+const {Client} = require('@elastic/elasticsearch');
 const DEFAULT_PAGE_SIZE = 100;
 const DEFAULT_INDEX = 'default_index_2'
 
@@ -37,11 +36,10 @@ class ElasticService {
     /**
      * Try to create default index, do nothing if already exists
      */
-    async createDefaultIndex(){
+    async createDefaultIndex() {
         try {
             await this.createIndex()
-        } catch (error){
-            console.log(error)
+        } catch (error) {
             // Do Nothing
         }
     }
@@ -52,12 +50,11 @@ class ElasticService {
      */
     async createIndex(indexName = DEFAULT_INDEX) {
         try {
-          await this.client.indices.create({
-              index: indexName,
-              timeout: DEFAULT_TIMEOUT,
-          });
-          console.log(`[ElasticService][createIndex] '${indexName}' index creation done.`);
-        } catch (error){
+            await this.client.indices.create({
+                index: indexName
+            });
+            console.log(`[ElasticService][createIndex] '${indexName}' index creation done.`);
+        } catch (error) {
             throw new Error(`[ElasticService][createIndex] Index creation failed : ${error}`);
         }
     }
@@ -70,11 +67,10 @@ class ElasticService {
         try {
             await this.client.indices.putMapping({
                 index: indexName,
-                timeout: DEFAULT_TIMEOUT,
                 body: mapping
             })
             console.log(`[ElasticService][addMappingToIndex] new mapping added to '${indexName}'.`);
-        } catch (error){
+        } catch (error) {
             throw new Error(`[ElasticService][addMappingToIndex] mapping cannot be added to '${indexName}': ${error}`);
         }
     }
@@ -86,20 +82,14 @@ class ElasticService {
      * @param {string} indexName
      * @param {object} data
      */
-    async addDocumentToIndex(
-        {
-            id,
-            data,
-            indexName = DEFAULT_INDEX,
-        }) {
+    async addDocumentToIndex(id, data, indexName = DEFAULT_INDEX) {
         try {
-            await client.index({
+            await this.client.index({
                 index: indexName,
-                timeout: DEFAULT_INDEX,
                 body: data
             })
             console.log(`[ElasticService][addDocumentToIndex] New document added to '${indexName}'`);
-        } catch (error){
+        } catch (error) {
             throw new Error(`[ElasticService][addDocumentToIndex] Document cannot be added to '${indexName}': ${error}`);
         }
     }
@@ -117,7 +107,7 @@ class ElasticService {
             indexName = DEFAULT_INDEX,
             requestType = RequestTypes.MATCH_REQUEST,
             fields = {},
-            pagination= {
+            pagination = {
                 start: 0,
                 end: DEFAULT_PAGE_SIZE
             }
